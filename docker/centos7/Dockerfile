@@ -38,11 +38,11 @@ RUN nginx -V
 
 RUN yum -y install gcc pcre-devel openssl-devel libxslt-devel gd-devel perl-ExtUtils-Embed GeoIP-devel gperftools-devel && \
     git clone https://github.com/tony2001/ngx_http_pinba_module && \
-    wget http://nginx.org/download/nginx-1.12.2.tar.gz && tar zxvf nginx-1.12.2.tar.gz && cd nginx-1.12.2 && \
-    ./configure --add-dynamic-module=/ngx_http_pinba_module --with-file-aio --with-ipv6 --with-http_auth_request_module --with-http_ssl_module --with-http_v2_module --with-http_realip_module --with-http_addition_module --with-http_xslt_module=dynamic --with-http_image_filter_module=dynamic --with-http_geoip_module=dynamic --with-http_sub_module --with-http_dav_module --with-http_flv_module --with-http_mp4_module --with-http_gunzip_module --with-http_gzip_static_module --with-http_random_index_module --with-http_secure_link_module --with-http_degradation_module --with-http_slice_module --with-http_stub_status_module --with-http_perl_module=dynamic --with-mail=dynamic --with-mail_ssl_module --with-pcre --with-pcre-jit --with-stream=dynamic --with-stream_ssl_module --with-google_perftools_module --with-debug && \
+    wget http://nginx.org/download/nginx-1.16.1.tar.gz && tar zxvf nginx-1.16.1.tar.gz && cd nginx-1.16.1 && \
+    ./configure --add-dynamic-module=/ngx_http_pinba_module --with-file-aio --with-http_auth_request_module --with-http_ssl_module --with-http_v2_module --with-http_realip_module --with-http_addition_module --with-http_xslt_module=dynamic --with-http_image_filter_module=dynamic --with-http_geoip_module=dynamic --with-http_sub_module --with-http_dav_module --with-http_flv_module --with-http_mp4_module --with-http_gunzip_module --with-http_gzip_static_module --with-http_random_index_module --with-http_secure_link_module --with-http_degradation_module --with-http_slice_module --with-http_stub_status_module --with-http_perl_module=dynamic --with-mail=dynamic --with-mail_ssl_module --with-pcre --with-pcre-jit --with-stream=dynamic --with-stream_ssl_module --with-google_perftools_module --with-debug && \
     make
 
-RUN cp /nginx-1.12.2/objs/ngx_http_pinba_module.so /usr/lib64/nginx/modules/ngx_http_pinba_module.so && \
+RUN cp /nginx-1.16.1/objs/ngx_http_pinba_module.so /usr/lib64/nginx/modules/ngx_http_pinba_module.so && \
     echo 'load_module /usr/lib64/nginx/modules/ngx_http_pinba_module.so;' > /usr/share/nginx/modules/ngx_http_pinba_module.conf
 
 RUN nginx -t
@@ -57,4 +57,5 @@ CMD ["/bin/bash"]
 
 #systemctl daemon-reload
 #systemctl enable pinba-server clickhouse-server grafana-server pinba-server php7.3-fpm
+# set timezone for php before start pinba and for clickhouse before start clickhouse
 #systemctl restart clickhouse-server grafana-server pinba-server php7.3-fpm
